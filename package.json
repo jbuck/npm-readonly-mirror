@@ -1,0 +1,12 @@
+{
+  "name": "npm-readonly-mirror",
+  "version": "0.0.0",
+  "description": "Mirror npm to S3",
+  "main": "master.js",
+  "dependencies": {
+    "async": "~0.2.9",
+    "knox": "~0.8.6"
+  },
+  "author": "Jon Buckley <jon@jbuckley.ca>",
+  "license": "Apache-2.0"
+}
