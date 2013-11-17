@@ -27,5 +27,17 @@ describe("npm-readonly-mirror", function() {
         done();
       });
     });
+
+    it("should download changes since last_seq", function(done) {
+      worker.get_changes(1, registry, function(err, changes) {
+        should.not.exist(err);
+        should.exist(changes);
+        changes.results.should.eql([
+          {"seq": 2, "id": "ghjk", "changes":[{"rev":"1-b"}]}
+        ]);
+        changes.last_seq.should.equal(2);
+        done();
+      });
+    });
   });
 });
