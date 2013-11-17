@@ -2,7 +2,7 @@
 
 var should = require("should");
 var server = require("./server");
-var worker = require("../worker");
+var worker = require("../lib/worker");
 
 var registry = "http://localhost:28080/registry/";
 
