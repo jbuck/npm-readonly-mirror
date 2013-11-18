@@ -6,8 +6,6 @@ var registry = config.source;
 var changes = require("./_changes");
 
 var async = require("async");
-var http = require("http");
-http.globalAgent.maxSockets = Infinity;
 
 var s3 = require("knox").createClient( config.target.s3 );
 
@@ -35,11 +33,12 @@ var q = async.queue(function(task, q_callback) {
         var url = dist.tarball,
             path = require("url").parse(url).path;
 
-        http.get(url, function(res) {
+        worker.get_tarball_stream(url, function(err, res) {
+          console.log("GET " + url + " returned HTTP " + res.statusCode + " " + res.headers["content-length"]);
+
           if (res.statusCode !== 200) {
             return package_callback("GET " + url + " returned HTTP " + res.statusCode);
           }
-          console.log("GET " + url + " returned HTTP " + res.statusCode + " " + res.headers["content-length"]);
 
           input_bytes += parseInt(res.headers["content-length"], 10);
 
@@ -65,7 +64,7 @@ var q = async.queue(function(task, q_callback) {
           });
 
           res.on("error", package_callback);
-        }).on("error", package_callback);
+        });
       }, 4);
 
       package_download.drain = function() {
