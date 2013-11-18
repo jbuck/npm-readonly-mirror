@@ -17,9 +17,6 @@ var fs = require("fs");
 
 var worker = require("./lib/worker");
 
-var input_bytes = 0;
-var output_bytes = 0;
-
 var q = async.queue(function(task, q_callback) {
   if (task.deleted) {
     return q_callback();
@@ -40,8 +37,6 @@ var q = async.queue(function(task, q_callback) {
             return package_callback("GET " + url + " returned HTTP " + res.statusCode);
           }
 
-          input_bytes += parseInt(res.headers["content-length"], 10);
-
           var headers = {
             "Content-MD5": res.headers["content-md5"],
             "Content-Length": res.headers["content-length"],
@@ -57,8 +52,6 @@ var q = async.queue(function(task, q_callback) {
               return package_callback("PUT Object " + path + " returned HTTP " + s3_res.statusCode);
             }
             console.log("PUT Object " + path + " returned HTTP " + s3_res.statusCode + " " + res.headers["content-length"]);
-
-            output_bytes += parseInt(res.headers["content-length"], 10);
 
             package_callback();
           });
@@ -113,8 +106,6 @@ var q = async.queue(function(task, q_callback) {
         }
         console.log("PUT Object " + path + " returned HTTP " + s3_res.statusCode + " " + body.length);
 
-        output_bytes += parseInt(body.length, 10);
-
         w_callback();
       });
     }
@@ -139,8 +130,6 @@ var q = async.queue(function(task, q_callback) {
 
 q.drain = function() {
   console.log("completed syncing");
-  console.log("input %d MB", input_bytes / 1024 / 1024);
-  console.log("output %d MB", output_bytes / 1024 / 1024);
   process.exit(0);
 };
 
