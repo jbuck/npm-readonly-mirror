@@ -7,6 +7,7 @@ var server = require("./server");
 var worker = require("../lib/worker");
 
 var registry = "http://localhost:28080/registry/";
+var tarball = registry + "ghjk/-/ghjk-0.0.0.tgz";
 
 describe("npm-readonly-mirror", function() {
   before(function(done) {
@@ -50,6 +51,20 @@ describe("npm-readonly-mirror", function() {
         should.exist(package_index);
         package_index.should.be.an.instanceOf(Object);
         done();
+      });
+    });
+  });
+
+  describe(".get_tarball_stream", function() {
+    it("should stream tarball", function(done) {
+      worker.get_tarball_stream(tarball, function(err, res) {
+        should.not.exist(err);
+        should.exist(res);
+        res.headers["content-length"].should.equal("5");
+        res.headers["content-md5"].should.equal("KwAEL3SBx7BWxLQQ0o8zzw==");
+        res.headers["content-type"].should.equal("application/octet-stream");
+        res.on("data", function() {});
+        res.on("end", function() { done(); });
       });
     });
   });

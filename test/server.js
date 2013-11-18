@@ -1,5 +1,6 @@
 "use strict";
 
+var crypto = require("crypto");
 var fs = require("fs");
 var http = require("http");
 
@@ -14,7 +15,8 @@ server.on("request", function(req, res) {
 
     res.writeHead(200, {
       "Content-Length": data.length,
-      "Content-Type": "text/plain; charset=utf-8"
+      "Content-MD5": crypto.createHash("md5").update(data).digest("base64"),
+      "Content-Type": "application/octet-stream"
     });
     res.write(data);
     res.end();
