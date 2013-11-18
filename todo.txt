@@ -2,3 +2,4 @@
 {"seq":203737,"id":"kfc-client","changes":[{"rev":"1-22fc0e9b1d8d0936c69933a2d0bf7b23"}]}, // package_index.versions.length == 0
 {"seq":275157,"id":"ø","changes":[{"rev":"1-134132f3d70b53b2b0e74b94052ac617"}]}, // S3 PUT fails because the URL is encoded incorrectly: /npm-readonly-mirror/Ã¸/index.json
 move /package-name/index.json -> /package-name
+{"seq":678625,"id":"soap","changes":[{"rev":"63-a8ce77b838989afddf6637cce476fc1a"}]}, // amazon s3 has an SOAP endpoint called "soap", so this returns an HTTP 405 method not allowed. changing options.style = "path" seems to fix it, but then cloudfront has issues.
