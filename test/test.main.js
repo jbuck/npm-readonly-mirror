@@ -40,4 +40,15 @@ describe("npm-readonly-mirror", function() {
       });
     });
   });
+
+  describe(".get_package_index", function() {
+    it("should download package index", function(done) {
+      worker.get_package_index("asdf", registry, function(err, package_index) {
+        should.not.exist(err);
+        should.exist(package_index);
+        package_index.should.be.an.instanceOf(Object);
+        done();
+      });
+    });
+  });
 });
