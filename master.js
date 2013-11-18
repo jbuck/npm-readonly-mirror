@@ -6,6 +6,7 @@ var async = require("async");
 var s3 = require("knox").createClient( config.target.s3 );
 var fs = require("fs");
 var worker = require("./lib/worker");
+var url_module = require("url");
 
 var q = async.queue(function(task, q_callback) {
   if (task.deleted) {
@@ -17,8 +18,13 @@ var q = async.queue(function(task, q_callback) {
       worker.get_package_index(task.id, config.source, w_callback);
     }, function clone_tarballs(package_index, w_callback) {
       var package_download = async.queue(function(dist, package_callback) {
-        var url = dist.tarball,
-            path = require("url").parse(url).path;
+        var url = url_module.parse(dist.tarball),
+            path = url_module.parse(url).path;
+
+        // Hack to work around broken package uploads
+        url.host = "registry.npmjs.org";
+        url.protocol = "http:";
+        url = url.format();
 
         worker.get_tarball_stream(url, function(err, res) {
           if (err) {

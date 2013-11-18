@@ -3,3 +3,4 @@
 {"seq":275157,"id":"ø","changes":[{"rev":"1-134132f3d70b53b2b0e74b94052ac617"}]}, // S3 PUT fails because the URL is encoded incorrectly: /npm-readonly-mirror/Ã¸/index.json
 move /package-name/index.json -> /package-name
 {"seq":678625,"id":"soap","changes":[{"rev":"63-a8ce77b838989afddf6637cce476fc1a"}]}, // amazon s3 has an SOAP endpoint called "soap", so this returns an HTTP 405 method not allowed. changing options.style = "path" seems to fix it, but then cloudfront has issues.
+{"seq":682753,"id":"probe_couchdb","changes":[{"rev":"83-417f49d90de286a6b1738c13bd8c9f26"}]}, // has a broken tarball link, need to override host
