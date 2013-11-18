@@ -1,3 +1,5 @@
+/* globals describe, it, before, after */
+
 "use strict";
 
 var should = require("should");

@@ -1,3 +1,5 @@
+"use strict";
+
 var config = require("./local");
 
 var registry = config.source;
@@ -25,7 +27,7 @@ var q = async.queue(function(task, q_callback) {
     return q_callback();
   }
 
-  var w = async.waterfall([
+  async.waterfall([
     function get_package_index(w_callback) {
       worker.get_package_index(task.id, registry, w_callback);
     }, function clone_tarballs(package_index, w_callback) {
@@ -104,7 +106,7 @@ var q = async.queue(function(task, q_callback) {
 
       s3.putBuffer(body, path, headers, function(err, s3_res) {
         if (err) {
-          return package_callback(err);
+          return w_callback(err);
         }
 
         if (s3_res.statusCode !== 200) {
@@ -144,10 +146,10 @@ q.drain = function() {
 };
 
 var cur = 0, max = 10000;
-for (var i = 0; i < changes.results.length && cur < max; i++) {
+for (var i = 0; i < changes.results.length && cur < max; i += 1) {
   if (changes.results[i].seq <= config.last_seq) {
     continue;
   }
-  cur++;
+  cur += 1;
   q.push(changes.results[i]);
 }

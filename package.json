@@ -8,11 +8,12 @@
     "knox": "~0.8.6"
   },
   "devDependencies": {
-    "should": "~2.1.0",
-    "mocha": "~1.14.0"
+    "jshint": "~2.3.0",
+    "mocha": "~1.14.0",
+    "should": "~2.1.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "jshint *.js */*.js && mocha"
   },
   "author": "Jon Buckley <jon@jbuckley.ca>",
   "license": "Apache-2.0"
