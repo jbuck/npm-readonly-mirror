@@ -1,16 +1,10 @@
 "use strict";
 
 var config = require("./local");
-
-var registry = config.source;
 var changes = require("./_changes");
-
 var async = require("async");
-
 var s3 = require("knox").createClient( config.target.s3 );
-
 var fs = require("fs");
-
 var worker = require("./lib/worker");
 
 var q = async.queue(function(task, q_callback) {
@@ -20,14 +14,23 @@ var q = async.queue(function(task, q_callback) {
 
   async.waterfall([
     function get_package_index(w_callback) {
-      worker.get_package_index(task.id, registry, w_callback);
+      worker.get_package_index(task.id, config.source, w_callback);
     }, function clone_tarballs(package_index, w_callback) {
       var package_download = async.queue(function(dist, package_callback) {
         var url = dist.tarball,
             path = require("url").parse(url).path;
 
         worker.get_tarball_stream(url, function(err, res) {
+          if (err) {
+            return package_callback(err);
+          }
+
           console.log("GET " + url + " returned HTTP " + res.statusCode + " " + res.headers["content-length"]);
+
+          // Who needs a tarball? Not us!
+          if (res.statusCode === 404) {
+            return package_callback();
+          }
 
           if (res.statusCode !== 200) {
             return package_callback("GET " + url + " returned HTTP " + res.statusCode);
@@ -44,13 +47,14 @@ var q = async.queue(function(task, q_callback) {
               return package_callback(err);
             }
 
+            console.log("PUT Object " + path + " returned HTTP " + s3_res.statusCode + " " + res.headers["content-length"]);
+
             if (s3_res.statusCode !== 200) {
               return package_callback("PUT Object " + path + " returned HTTP " + s3_res.statusCode);
             }
-            console.log("PUT Object " + path + " returned HTTP " + s3_res.statusCode + " " + res.headers["content-length"]);
 
             package_callback();
-          });
+          }).on("error", package_callback);
 
           res.on("error", package_callback);
         });
@@ -67,7 +71,11 @@ var q = async.queue(function(task, q_callback) {
       Object.keys(package_index.versions).forEach(function(version) {
         var pkg = package_index.versions[version].dist;
         pkg.version = version;
-        package_download.push(pkg);
+        package_download.push(pkg, function(err) {
+          if (err) {
+            w_callback(err);
+          }
+        });
       });
 
     }, function rewrite_index(package_index, w_callback) {
