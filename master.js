@@ -6,9 +6,6 @@ var changes = require("./_changes");
 var async = require("async");
 var http = require("http");
 http.globalAgent.maxSockets = Infinity;
-var util = require("util");
-
-var crypto = require('crypto');
 
 var s3 = require("knox").createClient( config.target.s3 );
 
@@ -18,41 +15,19 @@ var target = url_module.parse(config.website);
 
 var fs = require("fs");
 
+var worker = require("./lib/worker");
+
 var input_bytes = 0;
 var output_bytes = 0;
 
-var q = async.queue(function worker(task, q_callback) {
+var q = async.queue(function(task, q_callback) {
   if (task.deleted) {
     return q_callback();
   }
 
   var w = async.waterfall([
     function get_package_index(w_callback) {
-      var url = registry + task.id + "?revs=true&rev=" + task.changes[0].rev;
-
-      http.get(url, function index_package_res(res) {
-        if (res.statusCode !== 200) {
-          return w_callback("GET " + url + " returned HTTP " + res.statusCode);
-        }
-        console.log("GET " + url + " returned HTTP " + res.statusCode + " " + res.headers["content-length"]);
-
-        input_bytes += parseInt(res.headers["content-length"], 10);
-
-        var body = "";
-        res.setEncoding("utf8");
-        res.on("data", function data_chunk(chunk) {
-          body += chunk;
-        });
-        res.on("end", function data_end() {
-          try {
-            var package_index = JSON.parse(body);
-            w_callback(null, package_index);
-          } catch (err) {
-            w_callback(err);
-          }
-        });
-        res.on("error", w_callback);
-      }).on("error", w_callback);
+      worker.get_package_index(task.id, registry, w_callback);
     }, function clone_tarballs(package_index, w_callback) {
       var package_download = async.queue(function(dist, package_callback) {
         var url = dist.tarball,
@@ -102,7 +77,7 @@ var q = async.queue(function worker(task, q_callback) {
       Object.keys(package_index.versions).forEach(function(version) {
         var pkg = package_index.versions[version].dist;
         pkg.version = version;
-        package_download.push(pkg)
+        package_download.push(pkg);
       });
 
     }, function rewrite_index(package_index, w_callback) {
