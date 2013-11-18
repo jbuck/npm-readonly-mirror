@@ -1,3 +1,4 @@
 {"seq":31210,"id":"error: forbidden","changes":[{"rev":"1-2f11e026763c10730d8b19ba5dce7565"}]}, // missing package_index.versions
 {"seq":203737,"id":"kfc-client","changes":[{"rev":"1-22fc0e9b1d8d0936c69933a2d0bf7b23"}]}, // package_index.versions.length == 0
 {"seq":275157,"id":"ø","changes":[{"rev":"1-134132f3d70b53b2b0e74b94052ac617"}]}, // S3 PUT fails because the URL is encoded incorrectly: /npm-readonly-mirror/Ã¸/index.json
+move /package-name/index.json -> /package-name

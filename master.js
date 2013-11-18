@@ -98,7 +98,7 @@ var q = async.queue(function(task, q_callback) {
       w_callback(null, package_index);
     }, function upload_index(package_index, w_callback) {
       var body = new Buffer(JSON.stringify(package_index));
-      var path = "/" + task.id + "/index.json";
+      var path = "/" + task.id;
       var headers = {
         "Content-Length": body.length,
         "Content-Type": "application/json; charset=utf-8"
