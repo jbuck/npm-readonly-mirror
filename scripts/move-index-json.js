@@ -1,3 +1,5 @@
+"use strict";
+
 var http = require("http");
 http.globalAgent.maxSockets = Infinity;
 var config = require("../local");
