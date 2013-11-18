@@ -9,10 +9,6 @@ var async = require("async");
 
 var s3 = require("knox").createClient( config.target.s3 );
 
-var url_module = require("url");
-
-var target = url_module.parse(config.website);
-
 var fs = require("fs");
 
 var worker = require("./lib/worker");
@@ -75,18 +71,7 @@ var q = async.queue(function(task, q_callback) {
       });
 
     }, function rewrite_index(package_index, w_callback) {
-      if (!package_index.versions) {
-        return w_callback(null, package_index);
-      }
-
-      Object.keys(package_index.versions).forEach(function(version) {
-        var orig_url = url_module.parse(package_index.versions[version].dist.tarball);
-        orig_url.protocol = target.protocol;
-        orig_url.host = target.host;
-
-        package_index.versions[version].dist.tarball = orig_url.format();
-      });
-
+      worker.rewrite_package_dist(config.website, package_index);
       w_callback(null, package_index);
     }, function upload_index(package_index, w_callback) {
       var body = new Buffer(JSON.stringify(package_index));

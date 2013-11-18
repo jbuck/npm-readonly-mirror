@@ -8,6 +8,21 @@ var worker = require("../lib/worker");
 
 var registry = "http://localhost:28080/registry/";
 var tarball = registry + "ghjk/-/ghjk-0.0.0.tgz";
+var pkg_index = {
+  versions: {
+    "0.0.0": {
+      dist: {
+        tarball: "http://localhost:8080/asdf/-/asdf-0.0.0.tgz"
+      }
+    },
+    "0.0.1": {
+      dist: {
+        tarball: "http://localhost:8080/asdf/-/asdf-0.0.1.tgz"
+      }
+    }
+  }
+};
+var new_target = "http://localhost:28080";
 
 describe("npm-readonly-mirror", function() {
   before(function(done) {
@@ -66,6 +81,15 @@ describe("npm-readonly-mirror", function() {
         res.on("data", function() {});
         res.on("end", function() { done(); });
       });
+    });
+  });
+
+  describe(".rewrite_package_dist", function() {
+    it("should rewrite dist url", function() {
+      var new_pkg = JSON.parse(JSON.stringify(pkg_index));
+      worker.rewrite_package_dist(new_target, new_pkg);
+      new_pkg.versions["0.0.0"].dist.tarball.should.equal("http://localhost:28080/asdf/-/asdf-0.0.0.tgz");
+      new_pkg.versions["0.0.1"].dist.tarball.should.equal("http://localhost:28080/asdf/-/asdf-0.0.1.tgz");
     });
   });
 });
