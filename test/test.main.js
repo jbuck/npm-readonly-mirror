@@ -33,6 +33,17 @@ describe("npm-readonly-mirror", function() {
     server.close(done);
   });
 
+  describe(".get_json", function() {
+    it("should download some json", function(done) {
+      worker.get_json(registry + "_mirror_status", function(err, json) {
+        should.not.exist(err);
+        should.exist(json);
+        json.should.eql({last_seq:1});
+        done();
+      });
+    });
+  });
+
   describe(".get_changes", function() {
     it("should download all changes", function(done) {
       worker.get_changes(registry, function(err, changes) {
