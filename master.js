@@ -3,7 +3,7 @@
 var config = require("./local");
 var changes = require("./_changes");
 var async = require("async");
-var s3 = require("knox").createClient( config.target.s3 );
+var s3 = require("knox").createClient( config.s3 );
 var fs = require("fs");
 var worker = require("./lib/worker");
 var url_module = require("url");
@@ -15,7 +15,7 @@ var q = async.queue(function(task, q_callback) {
 
   async.waterfall([
     function get_package_index(w_callback) {
-      worker.get_package_index(task.id, config.source, w_callback);
+      worker.get_package_index(task.id, config.source_registry, w_callback);
     }, function clone_tarballs(package_index, w_callback) {
       var package_download = async.queue(function(dist, package_callback) {
         var url = url_module.parse(dist.tarball),
@@ -85,7 +85,7 @@ var q = async.queue(function(task, q_callback) {
       });
 
     }, function rewrite_index(package_index, w_callback) {
-      worker.rewrite_package_dist(config.website, package_index);
+      worker.rewrite_package_dist(config.package_host, package_index);
       w_callback(null, package_index);
     }, function upload_index(package_index, w_callback) {
       var body = new Buffer(JSON.stringify(package_index));

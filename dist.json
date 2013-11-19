@@ -1,12 +1,9 @@
 {
-  "source": "http://isaacs.iriscouch.com/registry/",
-  "target": {
-    "s3": {
-      "bucket": "<s3 bucket>",
-      "key": "<s3 key>",
-      "secret": "<s3 secret>"
-    }
+  "source_registry": "http://isaacs.iriscouch.com/registry/",
+  "s3": {
+    "bucket": "<s3 bucket>",
+    "key": "<s3 key>",
+    "secret": "<s3 secret>"
   },
-  "website": "<s3 website url>",
-  "last_seq": 0
+  "package_host": "<website where packages will be hosted>"
 }
