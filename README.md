@@ -19,4 +19,4 @@ To revert back to the original NPM registry, you can delete your local npm confi
 * `npm config delete registry`
 * `npm config delete ca`
 
-If you run into any issues with our mirror, please [file a bug](issues/new). Thanks!
+If you run into any issues with our mirror, please [file a bug](https://github.com/jbuck/npm-readonly-mirror/issues). Thanks!
