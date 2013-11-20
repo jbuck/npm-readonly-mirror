@@ -6,10 +6,14 @@ var http = require("http");
 
 var server = http.createServer();
 server.on("request", function(req, res) {
+  if (req.url === "/registry/") {
+    req.url = "/registry/_index";
+  }
+
   fs.readFile(__dirname + "/fixtures" + req.url, function(err, data) {
     if (err) {
       res.writeHead(404);
-      res.end();
+      res.end(JSON.stringify({"error":"not_found","reason":"missing"}));
       return;
     }
 

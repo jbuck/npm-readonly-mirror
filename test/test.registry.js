@@ -86,4 +86,19 @@ describe("lib/registry.js", function() {
       });
     });
   });
+
+  describe(".get_status", function() {
+    it("should download the index status", function(done) {
+      var local = registry(registry_url);
+
+      local.get_status(function(err, res, status) {
+        should.not.exist(err);
+        should.exist(res);
+        res.statusCode.should.equal(200);
+        should.exist(status);
+        status.update_seq.should.equal(1);
+        done();
+      });
+    });
+  });
 });
