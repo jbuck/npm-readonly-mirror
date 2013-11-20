@@ -103,4 +103,25 @@ describe("npm-readonly-mirror", function() {
       new_pkg.versions["0.0.1"].dist.tarball.should.equal("http://localhost:28080/asdf/-/asdf-0.0.1.tgz");
     });
   });
+
+  describe(".filter_package_files", function() {
+    it("should return all package files for column", function() {
+      var s3_list = require("./fixtures/s3_list_column");
+
+      worker.filter_package_files(s3_list).should.eql([
+        "column"
+      ]);
+
+    });
+
+    it("should return all package files for columnize", function() {
+      var s3_list = require("./fixtures/s3_list_column");
+      s3_list.Prefix = "columnize";
+
+      worker.filter_package_files(s3_list).should.eql([
+        "columnize",
+        "columnize/-/columnize-0.0.0.tgz"
+      ]);
+    });
+  });
 });
