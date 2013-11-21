@@ -23,8 +23,9 @@ var q = async.queue(function(task, q_callback) {
         var bodyParts = [];
         s3_res.on("data", function(c) { bodyParts.push(c); });
         s3_res.on("end", function() {
+          var json;
           try {
-            var json = JSON.parse(Buffer.concat(bodyParts).toString("utf8"));
+            json = JSON.parse(Buffer.concat(bodyParts).toString("utf8"));
           } catch (ex) {
             return w_callback(ex);
           }
@@ -72,7 +73,7 @@ var q = async.queue(function(task, q_callback) {
 
         s3_res.on("error", function(err) {
           w_callback(err);
-        })
+        });
       }).on("error", function(err) {
         w_callback(err);
       });
