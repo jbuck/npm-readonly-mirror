@@ -32,6 +32,17 @@ describe("lib/tasks.js", function() {
         done();
       });
     });
+
+    it("should output info events", function(done) {
+      var t = s3tasks(s3);
+
+      t.stream("http://localhost:28080/registry/ghjk/-/ghjk-0.0.0.tgz", "/ghjk", function(err) {
+        should.not.exist(err);
+        done();
+      }).on("info", function(s) {
+        should.exist(s);
+      });
+    });
   });
 
   describe(".put_json", function() {
