@@ -5,7 +5,7 @@
   "main": "master.js",
   "dependencies": {
     "async": "~0.2.9",
-    "knox": "~0.8.6",
+    "knox": "~0.8.7",
     "request": "~2.27.0"
   },
   "devDependencies": {
