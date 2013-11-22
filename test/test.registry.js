@@ -21,10 +21,8 @@ describe("lib/registry.js", function() {
     it("should download all changes", function(done) {
       var local = registry(registry_url);
 
-      local.get_changes(function(err, res, changes) {
+      local.get_changes(function(err, changes) {
         should.not.exist(err);
-        should.exist(res);
-        res.statusCode.should.equal(200);
         should.exist(changes);
         changes.results.should.eql([
           {"seq": 1, "id": "asdf", "changes":[{"rev":"1-a"}]}
@@ -39,10 +37,8 @@ describe("lib/registry.js", function() {
     it("should download all changes", function(done) {
       var local = registry(registry_url);
 
-      local.get_changes_since(1, function(err, res, changes) {
+      local.get_changes_since(1, function(err, changes) {
         should.not.exist(err);
-        should.exist(res);
-        res.statusCode.should.equal(200);
         should.exist(changes);
         changes.results.should.eql([
           {"seq": 2, "id": "ghjk", "changes":[{"rev":"1-b"}]}
@@ -57,10 +53,8 @@ describe("lib/registry.js", function() {
     it("should download package metadata", function(done) {
       var local = registry(registry_url);
 
-      local.get_package("asdf", function(err, res, package_index) {
+      local.get_package("asdf", function(err, package_index) {
         should.not.exist(err);
-        should.exist(res);
-        res.statusCode.should.equal(200);
         should.exist(package_index);
         package_index.should.be.an.instanceOf(Object);
         done();
@@ -72,10 +66,8 @@ describe("lib/registry.js", function() {
     it("should download the index status", function(done) {
       var local = registry(registry_url);
 
-      local.get_status(function(err, res, status) {
+      local.get_status(function(err, status) {
         should.not.exist(err);
-        should.exist(res);
-        res.statusCode.should.equal(200);
         should.exist(status);
         status.update_seq.should.equal(1);
         done();
