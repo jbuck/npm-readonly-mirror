@@ -6,7 +6,8 @@
   "dependencies": {
     "async": "~0.2.9",
     "knox": "~0.8.7",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "s3-lister": "~0.1.0"
   },
   "devDependencies": {
     "jshint": "~2.3.0",
