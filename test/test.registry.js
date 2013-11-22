@@ -7,6 +7,7 @@ var server = require("./server");
 var registry = require("../lib/registry");
 
 var registry_url = "http://localhost:28080/registry/";
+var package_host = "http://registry.localhost:38080/";
 
 describe("lib/registry.js", function() {
   before(function(done) {
@@ -15,6 +16,14 @@ describe("lib/registry.js", function() {
 
   after(function() {
     server.close();
+  });
+
+  describe("constructor", function() {
+    it("should have an optional package_host arg", function() {
+      var local = registry(registry_url, package_host);
+
+      local.package_host.should.equal(package_host);
+    });
   });
 
   describe(".get_changes", function() {
