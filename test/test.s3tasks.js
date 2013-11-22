@@ -43,6 +43,18 @@ describe("lib/tasks.js", function() {
         should.exist(s);
       });
     });
+
+    it("should throw an error with 404", function(done) {
+      var t = s3tasks(s3);
+
+      t.stream("http://localhost:28080/404", "/not-at-all", function(err) {
+        should.exist(err);
+        err.url.should.equal("http://localhost:28080/404");
+        err.method.should.equal("GET");
+        err.status_code.should.equal(404);
+        done();
+      });
+    });
   });
 
   describe(".put_json", function() {
