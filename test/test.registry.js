@@ -66,25 +66,6 @@ describe("lib/registry.js", function() {
         done();
       });
     });
-
-    it("should add a stream attribute to versions.dist", function(done) {
-      var local = registry(registry_url);
-      var tarball = "http://localhost:28080/registry/ghjk/-/ghjk-0.0.0.tgz";
-
-      local.get_package("asdf", function(err, res, package_index) {
-        var dist = package_index.versions["0.0.0"].dist;
-        dist.tarball.should.equal(tarball);
-
-        var stream = dist.stream;
-        should.exist(stream);
-        stream.on("response", function(tarball_res) {
-          should.exist(tarball_res);
-          tarball_res.statusCode.should.equal(200);
-        });
-        stream.on("data", function() {});
-        stream.on("end", function() { done(); });
-      });
-    });
   });
 
   describe(".get_status", function() {
