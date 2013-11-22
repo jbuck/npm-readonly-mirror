@@ -5,6 +5,14 @@ var fs = require("fs");
 var http = require("http");
 
 var server = http.createServer();
+server.on("checkContinue", function(req, res) {
+  res.writeContinue();
+  req.resume();
+  req.on("end", function() {
+    res.writeHead(200);
+    res.end();
+  });
+});
 server.on("request", function(req, res) {
   if (req.url === "/registry/") {
     req.url = "/registry/_index";
