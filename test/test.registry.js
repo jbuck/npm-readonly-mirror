@@ -13,8 +13,8 @@ describe("lib/registry.js", function() {
     server.listen(28080, done);
   });
 
-  after(function(done) {
-    server.close(done);
+  after(function() {
+    server.close();
   });
 
   describe(".get_changes", function() {
