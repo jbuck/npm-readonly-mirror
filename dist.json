@@ -1,9 +1,15 @@
 {
-  "source_registry": "http://isaacs.iriscouch.com/registry/",
-  "s3": {
-    "bucket": "<s3 bucket>",
-    "key": "<s3 key>",
-    "secret": "<s3 secret>"
+  "source": {
+    "registry": "http://isaacs.iriscouch.com/registry/",
+    "package_host": "http://registry.npmjs.org/"
   },
-  "package_host": "<website where packages will be hosted>"
+  "sink": {
+    "registry": "<url to your registry. Ideally your S3 website URL>",
+    "package_host": "<optional host to store packages on. Ideally a CDN!>"
+  },
+  "s3": {
+    "bucket": "<your s3 bucket>",
+    "key": "<your s3 key>",
+    "secret": "<your s3 secret>"
+  }
 }
