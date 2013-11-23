@@ -7,7 +7,7 @@ var server = require("./server");
 var registry = require("../lib/registry");
 
 var registry_url = "http://localhost:28080/registry/";
-var package_host = "http://registry.localhost:38080/";
+var package_host = "http://registry.localhost:38080";
 
 describe("lib/registry.js", function() {
   before(function(done) {
@@ -66,6 +66,19 @@ describe("lib/registry.js", function() {
         should.not.exist(err);
         should.exist(package_index);
         package_index.should.be.an.instanceOf(Object);
+        done();
+      });
+    });
+
+    it("should rewrite package tarball urls", function(done) {
+      var local = registry(registry_url, package_host);
+
+      local.get_package("asdf", function(err, package_index) {
+        should.not.exist(err);
+        should.exist(package_index);
+        package_index.versions["0.0.0"].dist.tarball.should.equal(
+          "http://registry.localhost:38080/registry/ghjk/-/ghjk-0.0.0.tgz"
+        );
         done();
       });
     });
