@@ -31,6 +31,10 @@ tasks.fetch_changes(source, sink, function(err, changes) {
     console.log("finished processing up to seq %d", changes.last_seq);
     var s3tasks = require("../lib/s3tasks")(s3_client);
     s3tasks.put_json({"update_seq":changes.last_seq}, "_index", function(err) {
+      if (err) {
+        throw err;
+      }
+
       console.log("updated s3 mirror with seq %d", changes.last_seq);
       console.log("shutting down...");
       process.exit(0);
