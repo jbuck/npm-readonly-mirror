@@ -6,6 +6,7 @@ var should = require("should");
 var utils = require("../lib/utils");
 
 var v0 = {
+  name: "asdf",
   versions: {
     "0.0.0": {
       dist: {
@@ -16,6 +17,7 @@ var v0 = {
   }
 };
 var v1 = {
+  name: "asdf",
   versions: {
     "0.0.1": {
       dist: {
@@ -26,6 +28,7 @@ var v1 = {
   }
 };
 var v1_new_sha = {
+  name: "asdf",
   versions: {
     "0.0.1": {
       dist: {
@@ -36,6 +39,7 @@ var v1_new_sha = {
   }
 };
 var v0_and_v1 = {
+  name: "asdf",
   versions: {
     "0.0.0": {
       dist: {
@@ -86,7 +90,8 @@ describe("lib/utils.js", function() {
     it("should remove unpublished packages", function() {
       var expected = {
         add: [],
-        remove: ["http://localhost/registry/asdf/-/asdf-0.0.0.tgz"]
+        remove: ["http://localhost/registry/asdf/-/asdf-0.0.0.tgz",
+                 "http://localhost/registry/asdf/0.0.0"]
       };
 
       var output = utils.diff_package(v1, v0_and_v1);
