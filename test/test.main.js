@@ -120,7 +120,8 @@ describe("npm-readonly-mirror", function() {
 
       worker.filter_package_files(s3_list).should.eql([
         "columnize",
-        "columnize/-/columnize-0.0.0.tgz"
+        "columnize/-/columnize-0.0.0.tgz",
+        "columnize/0.0.0",
       ]);
     });
   });
