@@ -30,7 +30,7 @@ tasks.fetch_changes(source, sink, function(err, changes) {
   q.drain = function() {
     console.log("finished processing up to seq %d", changes.last_seq);
     var s3tasks = require("../lib/s3tasks")(s3_client);
-    s3tasks.put_json({"update_seq":changes.last_seq}, "_index", function(err) {
+    s3tasks.put_json({"update_seq":changes.last_seq - 100}, "_index", function(err) {
       if (err) {
         throw err;
       }
