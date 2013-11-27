@@ -21,7 +21,7 @@ tasks.fetch_changes(source, sink, function(err, changes) {
     q.push(change, function err_handler(err) {
       if (err && err.toString() === "Error: not_found") {
         console.log("retrying %j", change);
-        change.retry_count++;
+        change.retry_count += 1;
         q.unshift(change, err_handler);
       }
 
