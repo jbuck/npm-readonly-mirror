@@ -18,7 +18,13 @@ tasks.fetch_changes(source, sink, function(err, changes) {
   changes.results.forEach(function(change) {
     change.retry_count = 0;
 
-    q.push(change, function(err) {
+    q.push(change, function err_handler(err) {
+      if (err && err.toString() === "Error: not_found") {
+        console.log("retrying %j", change);
+        change.retry_count++;
+        q.unshift(change, err_handler);
+      }
+
       if (err) {
         throw err;
       }
