@@ -16,6 +16,12 @@ tasks.fetch_changes(source, sink, function(err, changes) {
   }
 
   changes.results.forEach(function(change) {
+    // Amazon S3 has a bug where you can't GET a url named '/soap'
+    // Who uses SOAP anyways? Really.
+    if (change.id === "soap") {
+      return console.log("can't update soap");
+    }
+
     change.retry_count = 0;
 
     q.push(change, function err_handler(err) {
