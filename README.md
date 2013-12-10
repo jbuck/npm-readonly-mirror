@@ -74,4 +74,4 @@ Once you've done that fetch this repository and its dependencies:
 
 ## Known Issues
 
-
+* You can't install the `soap` package. This is an Amazon S3 bug with their SOAP API and me not working around it by using path-style operations.
