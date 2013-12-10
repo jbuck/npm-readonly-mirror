@@ -23,7 +23,13 @@ If you run into any issues with our mirror, please [file a bug](https://github.c
 
 ## Running your own read-only mirror
 
-To run your own mirror, you'll need to [sign up](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) for an AWS account
+To run your own mirror, you'll need to [sign up](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) for an AWS account.
+
+Once you've done that fetch this repository and its dependencies:
+
+* `git clone https://github.com/jbuck/npm-readonly-mirror.git`
+* `cd npm-readonly-mirror`
+* `npm install`
 
 ### Amazon S3 setup
 
@@ -65,3 +71,7 @@ To run your own mirror, you'll need to [sign up](https://portal.aws.amazon.com/g
   * Modify the sink registry to match your AWS S3 static website URL
   * Modify the sink package_host to match your AWS CloudFront URL
   * Modify the s3 bucket, key and secret to match your AWS information
+
+## Known Issues
+
+
