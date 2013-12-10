@@ -21,6 +21,8 @@ To revert back to the original NPM registry, you can delete your local npm confi
 
 If you run into any issues with our mirror, please [file a bug](https://github.com/jbuck/npm-readonly-mirror/issues). Thanks!
 
+Finally, if you've found Mozilla's mirror useful, you should consider [donating to Mozilla](https://sendto.mozilla.org/page/contribute/EOYFR2013-newdefault?source=20131210_jbuckley_software_chipin&amount=10). Contributions go to the Mozilla Foundation, a 501(c)(3) organization, to be used in its discretion for its charitable purposes. They are tax-deductible in the U.S. to the fullest extent permitted by law.
+
 ## Running your own read-only mirror
 
 To run your own mirror, you'll need to [sign up](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) for an AWS account.
