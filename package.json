@@ -2,7 +2,6 @@
   "name": "npm-readonly-mirror",
   "version": "0.0.0",
   "description": "Mirror npm to S3",
-  "main": "master.js",
   "dependencies": {
     "async": "~0.2.9",
     "hyperquest": "~0.1.8",
@@ -18,5 +17,14 @@
     "test": "jshint *.js */*.js && mocha"
   },
   "author": "Jon Buckley <jon@jbuckley.ca>",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jbuck/npm-readonly-mirror.git"
+  },
+  "homepage": "https://github.com/jbuck/npm-readonly-mirror",
+  "bugs": {
+    "url": "https://github.com/jbuck/npm-readonly-mirror/issues",
+    "email": "jon@jbuckley.ca"
+  }
 }
