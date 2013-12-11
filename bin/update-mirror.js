@@ -10,6 +10,9 @@ var s3_client = require("knox").createClient( config.s3 );
 var tasks = require("../lib/tasks");
 var q = tasks.change_queue(source, sink, s3_client);
 
+// See https://github.com/isaacs/npm/issues/4190
+var MULTI_MASTER_COMPENSATION_FACTOR = 550;
+
 tasks.fetch_changes(source, sink, function(err, changes) {
   if (err) {
     throw err;
@@ -42,7 +45,7 @@ tasks.fetch_changes(source, sink, function(err, changes) {
   q.drain = function() {
     console.log("finished processing up to seq %d", changes.last_seq);
     var s3tasks = require("../lib/s3tasks")(s3_client);
-    s3tasks.put_json({"update_seq":changes.last_seq - 100}, "_index", function(err) {
+    s3tasks.put_json({"update_seq":changes.last_seq - MULTI_MASTER_COMPENSATION_FACTOR}, "_index", function(err) {
       if (err) {
         throw err;
       }
