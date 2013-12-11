@@ -122,6 +122,7 @@ describe("npm-readonly-mirror", function() {
         "columnize",
         "columnize/-/columnize-0.0.0.tgz",
         "columnize/0.0.0",
+        "columnize/latest"
       ]);
     });
   });
