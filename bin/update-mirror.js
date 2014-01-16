@@ -11,7 +11,7 @@ var tasks = require("../lib/tasks");
 var q = tasks.change_queue(source, sink, s3_client);
 
 // See https://github.com/isaacs/npm/issues/4190
-var MULTI_MASTER_COMPENSATION_FACTOR = 550;
+var MULTI_MASTER_COMPENSATION_FACTOR = 100;
 
 tasks.fetch_changes(source, sink, function(err, changes) {
   if (err) {
