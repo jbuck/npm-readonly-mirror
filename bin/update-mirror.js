@@ -32,6 +32,7 @@ tasks.fetch_changes(source, sink, function(err, changes) {
         console.log("retrying %j", change);
         change.retry_count += 1;
         q.unshift(change, err_handler);
+        return;
       }
 
       if (err) {
