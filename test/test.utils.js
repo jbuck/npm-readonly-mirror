@@ -62,6 +62,9 @@ var not_found = {
 var no_versions = {
   versions: {}
 };
+var no_version_key = {
+
+};
 
 describe("lib/utils.js", function() {
   describe(".diff_package", function() {
@@ -139,6 +142,17 @@ describe("lib/utils.js", function() {
       };
 
       var output = utils.diff_package(v1_new_sha, v1);
+      should.exist(output);
+      output.should.eql(expected);
+    });
+
+    it("should handle no versions at all", function() {
+      var expected = {
+        add: ["http://localhost/registry/asdf/-/asdf-0.0.1.tgz"],
+        remove: []
+      };
+
+      var output = utils.diff_package(v1, no_version_key);
       should.exist(output);
       output.should.eql(expected);
     });
