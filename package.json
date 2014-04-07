@@ -4,7 +4,7 @@
   "description": "Mirror npm to S3",
   "dependencies": {
     "async": "~0.2.9",
-    "follow": "^0.10.4"
+    "follow": "^0.10.4",
     "hyperquest": "~0.1.8",
     "knox": "~0.8.7",
     "s3-lister": "~0.1.0"
