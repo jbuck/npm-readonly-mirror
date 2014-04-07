@@ -1,21 +1,41 @@
 "use strict";
 
-var config = require("../local");
+var config = {
+  "source": {
+    "registry": process.env.SOURCE_REGISTRY,
+    "package_host": process.env.SOURCE_PACKAGE_HOST
+  },
+  "sink": {
+    "registry": process.env.SINK_REGISTRY,
+    "package_host": process.env.SINK_PACKAGE_HOST
+  },
+  "s3": {
+    "bucket": process.env.S3_BUCKET,
+    "key": process.env.S3_KEY,
+    "secret": process.env.S3_SECRET
+  }
+};
 
 var registry = require("../lib/registry");
 var source = registry(config.source.registry, config.source.package_host),
     sink = registry(config.sink.registry, config.sink.package_host);
 
 var s3_client = require("knox").createClient( config.s3 );
+var s3tasks = require("../lib/s3tasks")(s3_client);
 var tasks = require("../lib/tasks");
 var q = tasks.change_queue(source, sink, s3_client);
 
-tasks.fetch_changes(source, sink, function(err, changes) {
+var follow = require("follow");
+
+sink.get_status(function(err, status) {
   if (err) {
     throw err;
   }
 
-  changes.results.forEach(function(change) {
+  follow({
+    db: config.source.registry,
+    since: status.update_seq
+  }, function(err, change) {
     // Amazon S3 has a bug where you can't GET a url named '/soap'
     // Who uses SOAP anyways? Really.
     if (change.id === "soap") {
@@ -37,24 +57,9 @@ tasks.fetch_changes(source, sink, function(err, changes) {
       }
 
       console.log("processed %j", change);
+      s3tasks.put_json({"update_seq": change.seq}, "_index", function(err) {
+        console.log("updated s3 mirror with seq %d", change.seq);
+      });
     });
   });
-
-  q.drain = function() {
-    console.log("finished processing up to seq %d", changes.last_seq);
-    var s3tasks = require("../lib/s3tasks")(s3_client);
-    s3tasks.put_json({"update_seq":changes.last_seq}, "_index", function(err) {
-      if (err) {
-        throw err;
-      }
-
-      console.log("updated s3 mirror with seq %d", changes.last_seq);
-      console.log("shutting down...");
-      process.exit(0);
-    });
-  };
-
-  if (changes.results.length === 0) {
-    console.log("finished processing up to seq %d", changes.last_seq);
-  }
 });
