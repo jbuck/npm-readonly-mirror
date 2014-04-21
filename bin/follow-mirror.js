@@ -57,7 +57,7 @@ sink.get_status(function(err, status) {
       }
 
       console.log("processed %j", change);
-      s3tasks.put_json({"update_seq": change.seq}, "_index", function(err) {
+      s3tasks.put_json({"update_seq": change.seq}, "_index", function() {
         console.log("updated s3 mirror with seq %d", change.seq);
       });
     });
